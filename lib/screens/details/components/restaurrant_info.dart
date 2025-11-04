@@ -7,7 +7,12 @@ import '../../../constants.dart';
 class RestaurantInfo extends StatelessWidget {
   const RestaurantInfo({
     super.key,
+    required this.restaurantName,
+    required this.foodType,
   });
+
+  final String restaurantName;
+  final List<String> foodType;
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +22,13 @@ class RestaurantInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Mayfield Bakery & Cafe",
+            restaurantName,
             style: Theme.of(context).textTheme.headlineMedium,
             maxLines: 1,
           ),
           const SizedBox(height: defaultPadding / 2),
-          const PriceRangeAndFoodtype(
-            foodType: ["Chinese", "American", "Deshi food"],
+          PriceRangeAndFoodtype(
+            foodType: foodType,
           ),
           const SizedBox(height: defaultPadding / 2),
           const RatingWithCounter(rating: 4.3, numOfRating: 200),

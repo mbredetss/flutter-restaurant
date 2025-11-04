@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/screens/addToOrder/add_to_order_screen.dart';
 
 import '../../../components/small_dot.dart';
 import '../../../constants.dart';
@@ -6,14 +7,11 @@ import '../../../constants.dart';
 class FeaturedItemCard extends StatelessWidget {
   const FeaturedItemCard({
     super.key,
-    required this.foodType,
-    required this.image,
-    required this.priceRange,
+    required this.menuItem,
     required this.press,
-    required this.title,
   });
 
-  final String foodType, image, priceRange, title;
+  final Map<String, dynamic> menuItem;
   final VoidCallback press;
 
   @override
@@ -24,7 +22,12 @@ class FeaturedItemCard extends StatelessWidget {
         );
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
-      onTap: press,
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddToOrderScrreen(menuItem: menuItem),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: SizedBox(
@@ -37,14 +40,14 @@ class FeaturedItemCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   child: Image.asset(
-                    image,
+                    menuItem['image'],
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                title,
+                menuItem['name'],
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium
@@ -54,7 +57,7 @@ class FeaturedItemCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    priceRange,
+                    "\$${menuItem['price']}",
                     style: textStyle,
                   ),
                   const Padding(
@@ -62,7 +65,7 @@ class FeaturedItemCard extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: defaultPadding / 2),
                     child: SmallDot(),
                   ),
-                  Text(foodType, style: textStyle)
+                  Text("Food", style: textStyle) // Placeholder for foodType as it's not in featuredItems
                 ],
               ),
             ],

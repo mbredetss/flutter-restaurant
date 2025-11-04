@@ -6,7 +6,10 @@ import '../../../constants.dart';
 class Info extends StatelessWidget {
   const Info({
     super.key,
+    required this.menuItem,
   });
+
+  final Map<String, dynamic> menuItem;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class Info extends StatelessWidget {
         AspectRatio(
           aspectRatio: 1.33,
           child: Image.asset(
-            "assets/images/Header-image.png",
+            menuItem['image'], // Use menuItem image
             fit: BoxFit.cover,
           ),
         ),
@@ -26,17 +29,15 @@ class Info extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Cookie Sandwich",
+              Text(menuItem['name'] ?? menuItem['title'], // Use menuItem name or title
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
-              Text(
-                "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened.",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              // Featured items don't have a description, so we can remove this or provide a default
+              // Text(
+              //   menuItem['description'], // Use menuItem description
+              //   style: Theme.of(context).textTheme.bodyMedium,
+              // ),
               const SizedBox(height: 16),
-              const PriceRangeAndFoodtype(
-                foodType: ["Chinese", "American", "Deshi food"],
-              ),
             ],
           ),
         ),

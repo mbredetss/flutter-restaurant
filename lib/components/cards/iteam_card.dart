@@ -76,7 +76,7 @@ class ItemCard extends StatelessWidget {
                               horizontal: defaultPadding / 2),
                           child: SmallDot(),
                         ),
-                        Text(foodType!, style: textStyle),
+                        Flexible(child: Text(foodType!, style: textStyle)),
                         const Spacer(),
                         Text(
                           "USD$price",

@@ -4,16 +4,19 @@ import '../../../constants.dart';
 import '../../addToOrder/add_to_order_screen.dart';
 
 class Items extends StatefulWidget {
-  const Items({super.key});
+  const Items({super.key, required this.menuItems});
+
+  final List<Map<String, dynamic>> menuItems;
 
   @override
   State<Items> createState() => _ItemsState();
 }
 
 class _ItemsState extends State<Items> {
-  
+
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,21 +34,21 @@ class _ItemsState extends State<Items> {
         ),
         // SizedBox(height: defaultPadding),
         ...List.generate(
-          demoData.length,
+          widget.menuItems.length,
           (index) => Padding(
             padding: const EdgeInsets.symmetric(
                 horizontal: defaultPadding, vertical: defaultPadding / 2),
             child: ItemCard(
-              title: demoData[index]["title"],
-              description: demoData[index]["description"],
-              image: demoData[index]["image"],
-              foodType: demoData[index]['foodType'],
-              price: demoData[index]["price"],
-              priceRange: demoData[index]["priceRange"],
+              title: widget.menuItems[index]["title"],
+              description: widget.menuItems[index]["description"],
+              image: widget.menuItems[index]["image"],
+              foodType: widget.menuItems[index]['foodType'],
+              price: widget.menuItems[index]["price"],
+              priceRange: widget.menuItems[index]["priceRange"],
               press: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddToOrderScrreen(),
+                  builder: (context) => AddToOrderScrreen(menuItem: widget.menuItems[index]),
                 ),
               ),
             ),
@@ -55,7 +58,6 @@ class _ItemsState extends State<Items> {
     );
   }
 }
-
 final List<Tab> demoTabs = <Tab>[
   const Tab(
     child: Text('Most Populars'),
@@ -73,15 +75,3 @@ final List<Tab> demoTabs = <Tab>[
     child: Text('Dim Sum'),
   ),
 ];
-
-final List<Map<String, dynamic>> demoData = List.generate(
-  3,
-  (index) => {
-    "image": "assets/images/featured _items_${index + 1}.png",
-    "title": "Cookie Sandwich",
-    "description": "Shortbread, chocolate turtle cookies, and red velvet.",
-    "price": 7.4,
-    "foodType": "Chinese",
-    "priceRange": "\$" * 2,
-  },
-);

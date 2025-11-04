@@ -94,23 +94,24 @@ class HomeScreen extends StatelessWidget {
 
               // Demo list of Big Cards
               ...List.generate(
-                // For demo we use 4 items
-                3,
+                demoMediumCardData.length,
                 (index) => Padding(
                   padding: const EdgeInsets.fromLTRB(
                       defaultPadding, 0, defaultPadding, defaultPadding),
                   child: RestaurantInfoBigCard(
                     // Images are List<String>
-                    images: demoBigImages..shuffle(),
-                    name: "McDonald's",
-                    rating: 4.3,
+                    images: [demoMediumCardData[index]['image']],
+                    name: demoMediumCardData[index]['name'],
+                    rating: demoMediumCardData[index]['rating'],
                     numOfRating: 200,
-                    deliveryTime: 25,
-                    foodType: const ["Chinese", "American", "Deshi food"],
+                    deliveryTime: demoMediumCardData[index]['delivertTime'],
+                    foodType: demoMediumCardData[index]['foodType'],
                     press: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DetailsScreen(),
+                        builder: (context) => DetailsScreen(
+                          restaurantData: demoMediumCardData[index],
+                        ),
                       ),
                     ),
                   ),

@@ -6,7 +6,10 @@ import 'featured_item_card.dart';
 class FeaturedItems extends StatelessWidget {
   const FeaturedItems({
     super.key,
+    required this.featuredItems,
   });
+
+  final List<Map<String, dynamic>> featuredItems;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +27,11 @@ class FeaturedItems extends StatelessWidget {
           child: Row(
             children: [
               ...List.generate(
-                3, // for demo we use 3
+                featuredItems.length,
                 (index) => Padding(
                   padding: const EdgeInsets.only(left: defaultPadding),
                   child: FeaturedItemCard(
-                    title: "Cookie Sandwich",
-                    image: "assets/images/featured _items_${index + 1}.png",
-                    foodType: "Chines",
-                    priceRange: "\$" * 2,
+                    menuItem: featuredItems[index],
                     press: () {},
                   ),
                 ),

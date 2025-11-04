@@ -28,7 +28,7 @@ class _MediumCardListState extends State<MediumCardList> {
   @override
   Widget build(BuildContext context) {
     // only for demo
-    List data = demoMediumCardData..shuffle();
+    List data = demoMediumCardData;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,7 +55,9 @@ class _MediumCardListState extends State<MediumCardList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const DetailsScreen(),
+                            builder: (context) => DetailsScreen(
+                              restaurantData: data[index],
+                            ),
                           ),
                         );
                       },

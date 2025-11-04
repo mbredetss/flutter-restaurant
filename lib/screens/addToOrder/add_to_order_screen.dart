@@ -10,7 +10,9 @@ import 'components/rounded_checkedbox_list_tile.dart';
 
 // ignore: must_be_immutable
 class AddToOrderScrreen extends StatefulWidget {
-  const AddToOrderScrreen({super.key});
+  const AddToOrderScrreen({super.key, required this.menuItem});
+
+  final Map<String, dynamic> menuItem;
 
   @override
   State<AddToOrderScrreen> createState() => _AddToOrderScrreenState();
@@ -50,44 +52,51 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Info(),
+              Info(menuItem: widget.menuItem), // Pass menuItem to Info widget
               const SizedBox(height: defaultPadding),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const RequiredSectionTitle(title: "Choice of top Cookie"),
-                    const SizedBox(height: defaultPadding),
-                    ...List.generate(
-                      choiceOfTopCookies.length,
-                      (index) => RoundedCheckboxListTile(
-                        isActive: index == choiceOfTopCookie,
-                        text: choiceOfTopCookies[index],
-                        press: () {
-                          setState(() {
-                            choiceOfTopCookie = index;
-                          });
-                        },
+                    if (widget.menuItem['choiceTitle'] != null)
+                      RequiredSectionTitle(title: widget.menuItem['choiceTitle']!),
+                    if (widget.menuItem['choiceTitle'] != null)
+                      const SizedBox(height: defaultPadding),
+                    if (widget.menuItem['choices'] != null)
+                      ...List.generate(
+                        widget.menuItem['choices']!.length,
+                        (index) => RoundedCheckboxListTile(
+                          isActive: index == choiceOfTopCookie,
+                          text: widget.menuItem['choices']![index],
+                          press: () {
+                            setState(() {
+                              choiceOfTopCookie = index;
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: defaultPadding),
-                    const RequiredSectionTitle(
-                        title: "Choice of Bottom Cookie"),
-                    const SizedBox(height: defaultPadding),
-                    ...List.generate(
-                      choiceOfTopCookies.length,
-                      (index) => RoundedCheckboxListTile(
-                        isActive: index == choiceOfBottomCookie,
-                        text: choiceOfTopCookies[index],
-                        press: () {
-                          setState(() {
-                            choiceOfBottomCookie = index;
-                          });
-                        },
+                    if (widget.menuItem['choices'] != null)
+                      const SizedBox(height: defaultPadding),
+                    if (widget.menuItem['choiceTitle2'] != null)
+                      RequiredSectionTitle(title: widget.menuItem['choiceTitle2']!),
+                    if (widget.menuItem['choiceTitle2'] != null)
+                      const SizedBox(height: defaultPadding),
+                    if (widget.menuItem['choices2'] != null)
+                      ...List.generate(
+                        widget.menuItem['choices2']!.length,
+                        (index) => RoundedCheckboxListTile(
+                          isActive: index == choiceOfBottomCookie,
+                          text: widget.menuItem['choices2']![index],
+                          press: () {
+                            setState(() {
+                              choiceOfBottomCookie = index;
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: defaultPadding),
+                    if (widget.menuItem['choices2'] != null)
+                      const SizedBox(height: defaultPadding),
                     // // Num of item
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -139,12 +148,11 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                       onPressed: () {
                         Cart().addOrder(
                           Order(
-                            item: "Cookie Sandwich",
-                            topCookie: choiceOfTopCookies[choiceOfTopCookie],
-                            bottomCookie:
-                                choiceOfTopCookies[choiceOfBottomCookie],
+                            item: widget.menuItem['name'] ?? widget.menuItem['title'],
+                            topCookie: "", // Featured items don't have choices
+                            bottomCookie: "", // Featured items don't have choices
                             quantity: numOfItems,
-                            price: 11.98,
+                            price: widget.menuItem['price']!,
                           ),
                         );
                         Navigator.push(
@@ -154,7 +162,7 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                           ),
                         );
                       },
-                      child: Text("Add to Order (\$${(11.98 * numOfItems).toStringAsFixed(2)})"),
+                      child: Text("Add to Order (\$${widget.menuItem['price']})"),
                     ),
                   ],
                 ),
@@ -166,15 +174,4 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
       ),
     );
   }
-
-  List<String> choiceOfTopCookies = [
-    "Choice of top Cookie",
-    "Cookies and Cream",
-    "Funfetti",
-    "M and M",
-    "Red Velvet",
-    "Peanut Butter",
-    "Snickerdoodle",
-    "White Chocolate Macadamia",
-  ];
 }

@@ -8,7 +8,9 @@ import 'components/iteams.dart';
 import 'components/restaurrant_info.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+  const DetailsScreen({super.key, required this.restaurantData});
+
+  final Map<String, dynamic> restaurantData;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +32,16 @@ class DetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: defaultPadding / 2),
-              RestaurantInfo(),
-              SizedBox(height: defaultPadding),
-              FeaturedItems(),
-              Items(),
+              const SizedBox(height: defaultPadding / 2),
+              RestaurantInfo(restaurantName: restaurantData['name'], foodType: restaurantData['foodType']),
+              const SizedBox(height: defaultPadding),
+              FeaturedItems(featuredItems: restaurantData['featuredItems']),
+              Items(menuItems: restaurantData['menuItems']),
             ],
           ),
         ),

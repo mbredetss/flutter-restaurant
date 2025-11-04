@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:foodly_ui/demo_data.dart';
 
 import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
-import '../../demo_data.dart';
+import '../../screens/details/details_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -16,10 +17,13 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   bool _showSearchResult = false;
   bool _isLoading = true;
+  String _searchQuery = "";
+  List<Map<String, dynamic>> _filteredRestaurants = [];
 
   @override
   void initState() {
     super.initState();
+    _filteredRestaurants = demoMediumCardData;
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _isLoading = false;
@@ -30,6 +34,11 @@ class _SearchScreenState extends State<SearchScreen> {
   void showResult() {
     setState(() {
       _isLoading = true;
+      _filteredRestaurants = demoMediumCardData
+          .where((restaurant) => restaurant["name"]
+              .toLowerCase()
+              .contains(_searchQuery.toLowerCase()))
+          .toList();
     });
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -51,31 +60,40 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: defaultPadding),
               Text('Search', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: defaultPadding),
-              const SearchForm(),
+              SearchForm(
+                onSearch: showResult,
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value;
+                  });
+                },
+              ),
               const SizedBox(height: defaultPadding),
               Text(_showSearchResult ? "Search Results" : "Top Restaurants",
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: defaultPadding),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _isLoading ? 2 : 5, //5 is demo length of your data
+                  itemCount: _isLoading ? 2 : _filteredRestaurants.length,
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.only(bottom: defaultPadding),
                     child: _isLoading
                         ? const BigCardScalton()
                         : RestaurantInfoBigCard(
-                            // Images are List<String>
-                            images: demoBigImages..shuffle(),
-                            name: "McDonald's",
-                            rating: 4.3,
-                            numOfRating: 200,
-                            deliveryTime: 25,
-                            foodType: const [
-                              "Chinese",
-                              "American",
-                              "Deshi food"
-                            ],
-                            press: () {},
+                            images: [_filteredRestaurants[index]["image"]],
+                            name: _filteredRestaurants[index]["name"],
+                            rating: _filteredRestaurants[index]["rating"],
+                            numOfRating: 200, // Assuming a default for now
+                            deliveryTime: _filteredRestaurants[index]["delivertTime"],
+                            foodType: _filteredRestaurants[index]["foodType"],
+                            press: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(
+                                  restaurantData: _filteredRestaurants[index],
+                                ),
+                              ),
+                            ),
                           ),
                   ),
                 ),
@@ -89,7 +107,10 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 
 class SearchForm extends StatefulWidget {
-  const SearchForm({super.key});
+  const SearchForm({super.key, required this.onSearch, required this.onChanged});
+
+  final VoidCallback onSearch;
+  final ValueChanged<String> onChanged;
 
   @override
   State<SearchForm> createState() => _SearchFormState();
@@ -103,15 +124,13 @@ class _SearchFormState extends State<SearchForm> {
       key: _formKey,
       child: TextFormField(
         onChanged: (value) {
-          // get data while typing
-          // if (value.length >= 3) showResult();
+          widget.onChanged(value);
+          if (value.length >= 3) widget.onSearch();
         },
         onFieldSubmitted: (value) {
           if (_formKey.currentState!.validate()) {
-            // If all data are correct then save data to out variables
             _formKey.currentState!.save();
-
-            // Once user pree on submit
+            widget.onSearch();
           } else {}
         },
         validator: requiredValidator.call,
