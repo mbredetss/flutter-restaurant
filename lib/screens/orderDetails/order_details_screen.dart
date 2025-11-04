@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../components/buttons/primary_button.dart';
 import '../../constants.dart';
+import '../../models/cart.dart';
 import 'components/order_item_card.dart';
 import 'components/price_row.dart';
 import 'components/total_price.dart';
@@ -11,6 +12,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Cart();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Orders"),
@@ -23,27 +25,27 @@ class OrderDetailsScreen extends StatelessWidget {
               const SizedBox(height: defaultPadding),
               // List of cart items
               ...List.generate(
-                demoItems.length,
+                cart.orders.length,
                 (index) => Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: defaultPadding / 2),
                   child: OrderedItemCard(
-                    title: demoItems[index]["title"],
+                    title: cart.orders[index].item,
                     description:
-                        "Shortbread, chocolate turtle cookies, and red velvet.",
-                    numOfItem: demoItems[index]["numOfItem"],
-                    price: demoItems[index]["price"].toDouble(),
+                        "${cart.orders[index].topCookie}, ${cart.orders[index].bottomCookie}",
+                    numOfItem: cart.orders[index].quantity,
+                    price: cart.orders[index].price,
                   ),
                 ),
               ),
-              const PriceRow(text: "Subtotal", price: 28.0),
+              PriceRow(text: "Subtotal", price: cart.total),
               const SizedBox(height: defaultPadding / 2),
               const PriceRow(text: "Delivery", price: 0),
               const SizedBox(height: defaultPadding / 2),
-              const TotalPrice(price: 20),
+              TotalPrice(price: cart.total),
               const SizedBox(height: defaultPadding * 2),
               PrimaryButton(
-                text: "Checkout (\$20.10)",
+                text: "Checkout (\$${cart.total.toStringAsFixed(2)})",
                 press: () {},
               ),
             ],
@@ -54,20 +56,3 @@ class OrderDetailsScreen extends StatelessWidget {
   }
 }
 
-const List<Map> demoItems = [
-  {
-    "title": "Cookie Sandwich",
-    "price": 7.4,
-    "numOfItem": 1,
-  },
-  {
-    "title": "Combo Burger",
-    "price": 12,
-    "numOfItem": 1,
-  },
-  {
-    "title": "Oyster Dish",
-    "price": 8.6,
-    "numOfItem": 2,
-  },
-];

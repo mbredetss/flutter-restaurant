@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
+import '../../models/cart.dart';
+import '../../models/order.dart';
 import '../orderDetails/order_details_screen.dart';
 import 'components/info.dart';
 import 'components/required_section_title.dart';
@@ -94,7 +96,13 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                           height: 40,
                           width: 40,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                if (numOfItems > 1) {
+                                  numOfItems--;
+                                }
+                              });
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
                               padding: EdgeInsets.zero,
@@ -112,7 +120,11 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                           height: 40,
                           width: 40,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                numOfItems++;
+                              });
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
                               padding: EdgeInsets.zero,
@@ -125,6 +137,16 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                     const SizedBox(height: defaultPadding),
                     ElevatedButton(
                       onPressed: () {
+                        Cart().addOrder(
+                          Order(
+                            item: "Cookie Sandwich",
+                            topCookie: choiceOfTopCookies[choiceOfTopCookie],
+                            bottomCookie:
+                                choiceOfTopCookies[choiceOfBottomCookie],
+                            quantity: numOfItems,
+                            price: 11.98,
+                          ),
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -132,7 +154,7 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                           ),
                         );
                       },
-                      child: const Text("Add to Order (\$11.98)"),
+                      child: Text("Add to Order (\$${(11.98 * numOfItems).toStringAsFixed(2)})"),
                     ),
                   ],
                 ),
