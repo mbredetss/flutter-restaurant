@@ -6,23 +6,19 @@ import '../constants.dart';
 class PriceRangeAndFoodtype extends StatelessWidget {
   const PriceRangeAndFoodtype({
     super.key,
-    this.priceRange = "Rp.Rp.",
     required this.foodType,
   });
-
-  final String priceRange;
   final List<String> foodType;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(priceRange, style: Theme.of(context).textTheme.bodyMedium),
         ...List.generate(
           foodType.length,
           (index) => Row(
             children: [
-              buildSmallDot(),
+              if (index > 0) buildSmallDot(),
               Text(foodType[index],
                   style: Theme.of(context).textTheme.bodyMedium),
             ],

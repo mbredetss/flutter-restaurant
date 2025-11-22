@@ -44,7 +44,7 @@ class _ItemsState extends State<Items> {
               image: widget.menuItems[index]["image"],
               foodType: widget.menuItems[index]['foodType'],
               price: widget.menuItems[index]["price"],
-              priceRange: widget.menuItems[index]["priceRange"],
+              priceRange: widget.menuItems[index]["priceRange"] ?? "Rp..", // provide a default value
               press: () => Navigator.push(
                 context,
                 MaterialPageRoute(

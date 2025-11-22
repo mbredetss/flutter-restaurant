@@ -39,7 +39,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Traditional Indonesian fried rice with chicken and vegetables.",
         "price": 8.0,
         "foodType": "Indonesian",
-        "priceRange": "Rp." * 3,
         "choices": ["No extra choices", "Spicy", "Extra Chicken", "Add Egg"],
         "restaurant": "Gravity Sky Lounge",
         "choiceTitle": "Choice of Customization",
@@ -50,7 +49,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Spicy Indonesian fried noodles with shrimp and vegetables.",
         "price": 7.5,
         "foodType": "Indonesian",
-        "priceRange": "Rp." * 3,
         "choices": ["No extra choices", "Spicy", "Extra Shrimp", "Add Egg"],
         "restaurant": "Gravity-sky-lounge",
         "choiceTitle": "Choice of Customization",
@@ -78,7 +76,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Freshly brewed hot coffee.",
         "price": 2.5,
         "foodType": "Beverage",
-        "priceRange": "Rp." * 1,
         "choices": ["No extra choices", "Sugar", "Cream", "Milk"],
         "restaurant": "Janji Jiwa",
         "choiceTitle": "Choice of Add-ons",
@@ -126,7 +123,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Delicious chicken muffin with a fried egg.",
         "price": 5.5,
         "foodType": "Fast Food",
-        "priceRange": "Rp." * 2,
         "choices": ["No extra choices", "Extra Cheese", "Add Bacon", "Make it a double"],
         "restaurant": "McDonald's",
         "choiceTitle": "Choice of Extras",
@@ -137,7 +133,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Classic chicken muffin, perfect for breakfast.",
         "price": 4.5,
         "foodType": "Fast Food",
-        "priceRange": "Rp." * 2,
         "choices": ["No extra choices", "Extra Cheese", "Add Hash Brown"],
         "restaurant": "McDonald's",
         "choiceTitle": "Choice of Extras",
@@ -148,7 +143,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Iconic breakfast sandwich with egg, cheese, and ham.",
         "price": 6.0,
         "foodType": "Fast Food",
-        "priceRange": "Rp." * 2,
         "choices": ["No extra choices", "Extra Cheese", "Add Sausage"],
         "restaurant": "McDonald's",
         "choiceTitle": "Choice of Extras",
@@ -159,7 +153,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Savory sausage patty on a toasted English muffin.",
         "price": 5.0,
         "foodType": "Fast Food",
-        "priceRange": "Rp." * 2,
         "choices": ["No extra choices", "Extra Cheese", "Add Egg"],
         "restaurant": "McDonald's",
         "choiceTitle": "Choice of Extras",
@@ -187,7 +180,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Spicy Indonesian fried noodles with shrimp and vegetables.",
         "price": 7.5,
         "foodType": "Indonesian",
-        "priceRange": "Rp." * 3,
         "choices": ["No extra choices", "Spicy", "Extra Shrimp", "Add Egg"],
         "restaurant": "Mie Gacoan",
         "choiceTitle": "Choice of Customization",
@@ -215,7 +207,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Traditional Indonesian fried rice with chicken and vegetables.",
         "price": 8.0,
         "foodType": "Indonesian",
-        "priceRange": "Rp." * 3,
         "choices": ["No extra choices", "Spicy", "Extra Chicken", "Add Egg"],
         "restaurant": "Plataran Makassar",
         "choiceTitle": "Choice of Customization",
@@ -243,7 +234,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Smooth cold brew with a hint of vanilla sweet cream.",
         "price": 4.0,
         "foodType": "Beverage",
-        "priceRange": "Rp." * 2,
         "choices": ["No extra choices", "Extra Vanilla", "Less Sweet Cream"],
         "restaurant": "Starbucks",
         "choiceTitle": "Choice of Customization",
@@ -271,7 +261,6 @@ List<Map<String, dynamic>> demoMediumCardData = [
         "description": "Spicy Indonesian fried noodles with shrimp and vegetables.",
         "price": 7.5,
         "foodType": "Indonesian",
-        "priceRange": "Rp." * 3,
         "choices": ["No extra choices", "Spicy", "Extra Shrimp", "Add Egg"],
         "restaurant": "Wizz Mie",
         "choiceTitle": "Choice of Customization",
@@ -279,3 +268,21 @@ List<Map<String, dynamic>> demoMediumCardData = [
     ]
   },
 ];
+
+// Function to extract unique categories from all menu items
+List<String> getUniqueCategories() {
+  Set<String> categories = <String>{};
+
+  for (var restaurant in demoMediumCardData) {
+    List menuItems = restaurant["menuItems"];
+    for (var item in menuItems) {
+      String? foodType = item["foodType"];
+      if (foodType != null) {
+        categories.add(foodType);
+      }
+    }
+  }
+
+  return categories.toList();
+}
+

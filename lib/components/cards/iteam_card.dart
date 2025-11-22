@@ -68,7 +68,7 @@ class ItemCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          priceRange!,
+                          priceRange ?? "",
                           style: textStyle,
                         ),
                         const Padding(
