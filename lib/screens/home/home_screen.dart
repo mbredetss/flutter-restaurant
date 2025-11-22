@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _loadUserLocation() async {
-    final user = await UserService.instance.getUser();
+    final user = await UserService.instance.getCurrentUser();
     if (user != null && user.location.isNotEmpty) {
       setState(() {
         _userLocation = user.location;

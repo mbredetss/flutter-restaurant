@@ -22,7 +22,7 @@ class PriceRow extends StatelessWidget {
           style: const TextStyle(color: titleColor),
         ),
         Text(
-          "\$$price",
+          formatCurrency(price),
           style: const TextStyle(color: titleColor),
         )
       ],

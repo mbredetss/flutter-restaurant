@@ -162,7 +162,7 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                           ),
                         );
                       },
-                      child: Text("Add to Order (\$${widget.menuItem['price']})"),
+                      child: Text("Add to Order (${formatCurrency(widget.menuItem['price'])})"),
                     ),
                   ],
                 ),

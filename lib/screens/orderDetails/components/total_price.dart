@@ -28,7 +28,7 @@ class TotalPrice extends StatelessWidget {
           ),
         ),
         Text(
-          "\$$price",
+          formatCurrency(price),
           style:
               const TextStyle(color: titleColor, fontWeight: FontWeight.w500),
         ),

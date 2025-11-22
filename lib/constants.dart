@@ -61,3 +61,12 @@ final phoneNumberValidator = MinLengthValidator(10,
 // Common Text
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
+
+// Currency formatting function
+String formatCurrency(double amount) {
+  // Format the currency with Rupiah symbol (Rp.) and proper thousand separators
+  // For Indonesian Rupiah, multiply by 1000 as prices in the app likely represent thousands
+  int rupiahValue = (amount * 1000).toInt();
+  String formatted = "Rp. ${rupiahValue.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}";
+  return formatted;
+}

@@ -57,7 +57,7 @@ class FeaturedItemCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "\$${menuItem['price']}",
+                    formatCurrency(menuItem['price']),
                     style: textStyle,
                   ),
                   const Padding(

@@ -45,7 +45,7 @@ class OrderDetailsScreen extends StatelessWidget {
               TotalPrice(price: cart.total),
               const SizedBox(height: defaultPadding * 2),
               PrimaryButton(
-                text: "Checkout (\$${cart.total.toStringAsFixed(2)})",
+                text: "Checkout (${formatCurrency(cart.total)})",
                 press: () {},
               ),
             ],

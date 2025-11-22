@@ -92,7 +92,7 @@ class _SignInFormState extends State<SignInForm> {
                     String email = _emailController.text.trim();
                     String password = _passwordController.text.trim();
 
-                    bool loginSuccess = await UserService.instance.checkUser(email, password);
+                    bool loginSuccess = await UserService.instance.loginUser(email, password);
 
                     if (loginSuccess) {
                       // Check if user already has a location set

@@ -6,7 +6,7 @@ import '../constants.dart';
 class PriceRangeAndFoodtype extends StatelessWidget {
   const PriceRangeAndFoodtype({
     super.key,
-    this.priceRange = "\$\$",
+    this.priceRange = "Rp.Rp.",
     required this.foodType,
   });
 

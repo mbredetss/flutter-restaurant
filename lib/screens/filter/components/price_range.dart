@@ -72,7 +72,7 @@ class RoundedButton extends StatelessWidget {
         ),
         onPressed: press,
         child: Text(
-          "\$" * (index + 1),
+          "Rp." * (index + 1),
           style: TextStyle(
             fontWeight: FontWeight.normal,
             color: isActive ? Colors.white : titleColor,
