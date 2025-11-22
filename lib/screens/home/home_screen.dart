@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../components/cards/big/big_card_image_slide.dart';
 import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/section_title.dart';
@@ -8,11 +7,34 @@ import '../../demo_data.dart';
 import '../../screens/filter/filter_screen.dart';
 import '../details/details_screen.dart';
 import '../featured/featurred_screen.dart';
+import '../../services/user_service.dart';
 import 'components/medium_card_list.dart';
 import 'components/promotion_banner.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _userLocation = "San Francisco"; // Default value
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserLocation();
+  }
+
+  void _loadUserLocation() async {
+    final user = await UserService.instance.getUser();
+    if (user != null && user.location.isNotEmpty) {
+      setState(() {
+        _userLocation = user.location;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +50,9 @@ class HomeScreen extends StatelessWidget {
                   .bodySmall!
                   .copyWith(color: primaryColor),
             ),
-            const Text(
-              "San Francisco",
-              style: TextStyle(color: Colors.black),
+            Text(
+              _userLocation,
+              style: const TextStyle(color: Colors.black),
             )
           ],
         ),
@@ -56,7 +78,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: defaultPadding),
+              const SizedBox(height: defaultPadding),   
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: BigCardImageSlide(images: demoBigImages),
