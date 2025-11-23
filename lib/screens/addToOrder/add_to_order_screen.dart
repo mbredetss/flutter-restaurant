@@ -147,7 +147,7 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                     ElevatedButton(
                       onPressed: () {
                         Cart().addOrder(
-                          Order(
+                          OrderItem(
                             item: widget.menuItem['name'] ?? widget.menuItem['title'],
                             topCookie: "", // Featured items don't have choices
                             bottomCookie: "", // Featured items don't have choices

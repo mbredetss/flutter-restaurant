@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../../findRestaurants/find_restaurants_screen.dart';
 import '../../../constants.dart';
+import '../../../models/user.dart';
+import '../../../screens/admin/admin_screen.dart';
+import '../../../screens/driver/driver_order_screen.dart';
 import '../../../services/user_service.dart';
 import '../../../entry_point.dart';
 import '../forgot_password_screen.dart';
@@ -95,27 +98,50 @@ class _SignInFormState extends State<SignInForm> {
                     bool loginSuccess = await UserService.instance.loginUser(email, password);
 
                     if (loginSuccess) {
-                      // Check if user already has a location set
-                      bool hasLocation = await UserService.instance.hasLocationSet();
+                      // Get the current user to check their role
+                      User? currentUser = UserService.instance.currentUser;
 
-                      if (hasLocation) {
-                        // If user already has location, go directly to EntryPoint
+                      if (currentUser != null && currentUser.role == UserRole.admin) {
+                        // If user is admin, redirect to AdminScreen
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const EntryPoint(),
+                            builder: (context) => const AdminScreen(),
+                          ),
+                          (_) => true,
+                        );
+                      } else if (currentUser != null && currentUser.role == UserRole.driver) {
+                        // If user is driver, redirect to DriverOrderScreen
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DriverOrderScreen(),
                           ),
                           (_) => true,
                         );
                       } else {
-                        // If user doesn't have location, navigate to FindRestaurantsScreen to set location
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FindRestaurantsScreen(),
-                          ),
-                          (_) => true,
-                        );
+                        // For customers or users with undefined role, check location and redirect accordingly
+                        bool hasLocation = await UserService.instance.hasLocationSet();
+
+                        if (hasLocation) {
+                          // If user already has location, go directly to EntryPoint
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EntryPoint(),
+                            ),
+                            (_) => true,
+                          );
+                        } else {
+                          // If user doesn't have location, navigate to FindRestaurantsScreen to set location
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const FindRestaurantsScreen(),
+                            ),
+                            (_) => true,
+                          );
+                        }
                       }
                     } else {
                       // Show error message

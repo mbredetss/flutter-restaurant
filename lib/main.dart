@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 import 'screens/onboarding/onboarding_scrreen.dart';
+import 'entry_point.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final bool onboarded = prefs.getBool('onboarded') ?? false;
+
+  runApp(MyApp(onboarded: onboarded));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool onboarded;
+
+  const MyApp({super.key, required this.onboarded});
 
   // This widget is the root of your application.
   @override
@@ -35,7 +43,7 @@ class MyApp extends StatelessWidget {
           hintStyle: TextStyle(color: bodyTextColor),
         ),
       ),
-      home: const OnboardingScreen(),
+      home: onboarded ? const EntryPoint() : const OnboardingScreen(),
     );
   }
 }

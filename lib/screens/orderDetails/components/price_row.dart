@@ -22,7 +22,7 @@ class PriceRow extends StatelessWidget {
           style: const TextStyle(color: titleColor),
         ),
         Text(
-          formatCurrency(price),
+          'Rp. ${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
           style: const TextStyle(color: titleColor),
         )
       ],

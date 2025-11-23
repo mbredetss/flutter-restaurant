@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'constants.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/orderDetails/order_details_screen.dart';
+import 'screens/order_history/order_history_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/search/search_screen.dart';
 
@@ -40,6 +41,23 @@ class _EntryPointState extends State<EntryPoint> {
     /// If you set your home screen as first screen make sure call [SizeConfig().init(context)]
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_navitems[_selectedIndex]["title"]),
+        actions: [
+          // Order history icon in the app bar
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OrderHistoryScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: CupertinoTabBar(
         onTap: (value) {

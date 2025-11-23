@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants.dart';
 
 import '../../components/dot_indicators.dart';
@@ -49,7 +50,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  // Mark user as onboarded in shared preferences
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('onboarded', true);
+
+                  // Navigate to sign in screen
                   Navigator.push(
                     context,
                     MaterialPageRoute(

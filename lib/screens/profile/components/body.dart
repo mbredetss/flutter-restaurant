@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../constants.dart';
+import '../user_profile_screen.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
@@ -25,8 +26,14 @@ class Body extends StatelessWidget {
               ProfileMenuCard(
                 svgSrc: "assets/icons/profile.svg",
                 title: "Profile Information",
-                subTitle: "Change your account information",
-                press: () {},
+                subTitle: "View your account information",
+                press: () {
+                  // Navigate to the user profile screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const UserProfileScreen()),
+                  );
+                },
               ),
               ProfileMenuCard(
                 svgSrc: "assets/icons/lock.svg",

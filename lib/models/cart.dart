@@ -9,13 +9,22 @@ class Cart {
 
   Cart._internal();
 
-  List<Order> orders = [];
+  String? restaurantName; // Added restaurant name to cart
+  List<OrderItem> orders = [];
 
-  void addOrder(Order order) {
+  void addOrder(OrderItem order) {
     orders.add(order);
   }
 
   double get total {
     return orders.fold(0, (sum, order) => sum + (order.price * order.quantity));
+  }
+
+  bool get isEmpty {
+    return orders.isEmpty;
+  }
+
+  void clear() {
+    orders.clear();
   }
 }

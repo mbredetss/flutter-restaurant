@@ -112,8 +112,8 @@ class _SignUpFormState extends State<SignUpForm> {
                     String email = _emailController.text.trim();
                     String password = _passwordController.text;
 
-                    // Register the user
-                    await UserService.instance.registerUser(email, password);
+                    // Register the user with their name
+                    await UserService.instance.registerUserWithName(email, password, _nameController.text.trim());
 
                     // Navigate to sign in screen after successful registration
                     Navigator.pushAndRemoveUntil(

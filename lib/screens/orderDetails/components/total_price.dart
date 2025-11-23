@@ -28,7 +28,7 @@ class TotalPrice extends StatelessWidget {
           ),
         ),
         Text(
-          formatCurrency(price),
+          'Rp. ${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
           style:
               const TextStyle(color: titleColor, fontWeight: FontWeight.w500),
         ),
