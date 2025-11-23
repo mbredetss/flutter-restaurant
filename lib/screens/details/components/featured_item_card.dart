@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/screens/addToOrder/add_to_order_screen.dart';
+import 'package:venieats/screens/addToOrder/add_to_order_screen.dart';
 
 import '../../../components/small_dot.dart';
 import '../../../constants.dart';

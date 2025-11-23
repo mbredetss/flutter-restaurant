@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:foodly_ui/services/user_service.dart';
+import 'package:venieats/services/user_service.dart';
 
 import '../../constants.dart';
 import '../../models/order.dart';

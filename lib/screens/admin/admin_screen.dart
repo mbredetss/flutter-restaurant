@@ -160,15 +160,6 @@ class _AdminScreenState extends State<AdminScreen> {
   void _registerDriver() async {
     if (_formKey.currentState!.validate()) {
       try {
-        // Create a new user with driver role
-        User newDriver = User(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-          name: _nameController.text.trim(),
-          role: UserRole.driver,
-          saldo: double.tryParse(_saldoController.text) ?? 0.0,
-        );
-
         // Check if user already exists
         if (await UserService.instance.checkUser(
           _emailController.text.trim(),

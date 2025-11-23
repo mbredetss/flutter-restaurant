@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/models/order.dart';
+import 'package:venieats/models/order.dart';
 
 import '../constants.dart';
 import '../entry_point.dart';
