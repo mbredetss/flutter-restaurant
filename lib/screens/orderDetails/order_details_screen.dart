@@ -26,9 +26,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Cart();
     final user = UserService.instance.currentUser!;
-    final total = cart.total + deliveryCost * 1000;
+    final total = Cart().total * 1000 + deliveryCost * 1000;
 
     return Scaffold(
       appBar: AppBar(
@@ -78,38 +77,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     builder: (context, snapshot) {
                       bool hasActiveOrder = snapshot.data ?? false;
                       if (hasActiveOrder) {
-                        // Show message when user has active order
-                        return const Padding(
-                          padding: EdgeInsets.all(defaultPadding),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.local_shipping,
-                                size: 64,
-                                color: Colors.orange,
-                              ),
-                              SizedBox(height: defaultPadding),
-                              Text(
-                                "You have an active order!",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: defaultPadding / 2),
-                              Text(
-                                "Please wait until your current order is completed before placing a new one.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                        // Show active order details when user has active order
+                        return _activeOrderDetails();
                       } else {
                         // Show regular cart items when no active order
+                        final cart = Cart();
                         return Column(
                           children: [
                             // List of cart items
@@ -140,7 +112,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                            PriceRow(text: "Subtotal", price: cart.total),
+                            PriceRow(text: "Subtotal", price: cart.total * 1000),
                             const SizedBox(height: defaultPadding / 2),
                             PriceRow(text: "Delivery", price: deliveryCost * 1000),
                             const SizedBox(height: defaultPadding / 2),
@@ -286,6 +258,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       'customer': user.toMap(),
       'driver': selectedDriver.toMap(),
       'cart_orders': cart.orders.map((order) => order.toJson()).toList(), // Need to implement toJson in OrderItem
+      'restaurantName': cart.restaurantName ?? 'Local Restaurant', // Store restaurant name
       'total': total,
       'orderTime': DateTime.now().millisecondsSinceEpoch,
       'status': OrderStatus.pending.toString().split('.').last, // Store the status
@@ -349,6 +322,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
         // Create a temporary cart with the order items
         Cart orderCart = Cart();
+        orderCart.restaurantName = orderData['restaurantName'] ?? 'Local Restaurant';
         for (OrderItem item in orderItems) {
           orderCart.addOrder(item);
         }
@@ -382,5 +356,108 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         ),
       );
     }
+  }
+
+  // Widget to show active order details
+  Widget _activeOrderDetails() {
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: _getActiveOrderData(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const Padding(
+            padding: EdgeInsets.all(defaultPadding),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.local_shipping,
+                  size: 64,
+                  color: Colors.orange,
+                ),
+                SizedBox(height: defaultPadding),
+                Text(
+                  "You have an active order!",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: defaultPadding / 2),
+                Text(
+                  "Please wait until your current order is completed before placing a new one.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final orderData = snapshot.data!;
+        final restaurantName = orderData['restaurantName'] ?? 'Local Restaurant';
+        final orderItems = (orderData['cart_orders'] as List?)
+            ?.map((item) => OrderItem.fromJson(item))
+            .toList() ?? [];
+
+        return Column(
+          children: [
+            // Restaurant Name
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: defaultPadding,
+                vertical: defaultPadding / 2,
+              ),
+              decoration: BoxDecoration(
+                color: primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                restaurantName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: defaultPadding),
+
+            // Order Items
+            ...orderItems.asMap().entries.map((entry) {
+              OrderItem item = entry.value;
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: defaultPadding / 2),
+                child: OrderedItemCard(
+                  title: item.item,
+                  description: "${item.topCookie}, ${item.bottomCookie}",
+                  numOfItem: item.quantity,
+                  price: item.price * item.quantity,
+                ),
+              );
+            }),
+
+            // Pricing Info
+            const SizedBox(height: defaultPadding),
+            PriceRow(text: "Subtotal", price: orderData['total'] != null ? (orderData['total'] - deliveryCost * 1000) : 0),
+            const SizedBox(height: defaultPadding / 2),
+            PriceRow(text: "Delivery", price: deliveryCost * 1000),
+            const SizedBox(height: defaultPadding / 2),
+            TotalPrice(price: orderData['total']?.toDouble() ?? 0),
+          ],
+        );
+      },
+    );
+  }
+
+  // Get the data of the active order
+  Future<Map<String, dynamic>?> _getActiveOrderData() async {
+    List<String>? activeOrderIds = await _getActiveOrderIds();
+    if (activeOrderIds != null && activeOrderIds.isNotEmpty) {
+      String latestOrderId = activeOrderIds.first;
+      return await UserService.instance.getActiveOrder(latestOrderId);
+    }
+    return null;
   }
 }

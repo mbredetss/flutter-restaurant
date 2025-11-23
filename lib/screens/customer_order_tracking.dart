@@ -230,7 +230,7 @@ class _CustomerOrderTrackingScreenState
             _buildInfoItem(
               icon: Icons.attach_money,
               label: "Total",
-              value: formatCurrency(_order.total),
+              value: 'Rp. ${_order.total.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
             ),
           ],
         ),

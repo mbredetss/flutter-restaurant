@@ -146,7 +146,11 @@ class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
                     const SizedBox(height: defaultPadding),
                     ElevatedButton(
                       onPressed: () {
-                        Cart().addOrder(
+                        // Get the cart instance and set restaurant name
+                        final cart = Cart();
+                        cart.restaurantName = widget.menuItem['restaurant'] ?? widget.menuItem['name'] ?? "Local Restaurant";
+
+                        cart.addOrder(
                           OrderItem(
                             item: widget.menuItem['name'] ?? widget.menuItem['title'],
                             topCookie: "", // Featured items don't have choices

@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../constants.dart';
 import '../user_profile_screen.dart';
+import '../../../services/user_service.dart';
+import '../../auth/sign_in_screen.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({super.key});
 
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -64,6 +71,38 @@ class Body extends StatelessWidget {
                 title: "Refer to Friends",
                 subTitle: "Get \$10 for reffering friends",
                 press: () {},
+              ),
+              const SizedBox(height: 16), // Add some spacing before the logout button
+              // Logout button
+              Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.red.shade700,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextButton(
+                  onPressed: () async {
+                    // Clear user data and navigate to login screen
+                    await UserService.instance.clearUserData();
+                    // Schedule navigation after the frame is rendered
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignInScreen()),
+                        (route) => false,
+                      );
+                    });
+                  },
+                  child: const Text(
+                    "Logout",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

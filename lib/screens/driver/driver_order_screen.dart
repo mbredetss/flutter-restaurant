@@ -88,6 +88,7 @@ class _DriverOrderScreenState extends State<DriverOrderScreen> {
                 .toList() ?? [];
 
             Cart cart = Cart();
+            cart.restaurantName = orderData['restaurantName'] ?? 'Local Restaurant';
             for (OrderItem item in orderItems) {
               cart.addOrder(item);
             }
@@ -204,6 +205,8 @@ class _DriverOrderScreenState extends State<DriverOrderScreen> {
     Map<String, dynamic>? orderData = await UserService.instance.getActiveOrder(order.id);
     if (orderData != null) {
       orderData['status'] = newStatus.toString().split('.').last;
+      // Preserve restaurant name to prevent losing it during status updates
+      orderData['restaurantName'] = order.cart.restaurantName ?? 'Local Restaurant';
       await UserService.instance.setActiveOrder(order.id, orderData);
     }
 
@@ -213,6 +216,8 @@ class _DriverOrderScreenState extends State<DriverOrderScreen> {
       Map<String, dynamic>? orderData = await UserService.instance.getActiveOrder(order.id);
       if (orderData != null) {
         orderData['status'] = newStatus.toString().split('.').last;
+        // Preserve restaurant name to prevent losing it during status updates
+        orderData['restaurantName'] = order.cart.restaurantName ?? 'Local Restaurant';
         await UserService.instance.setActiveOrder(order.id, orderData);
       }
 
